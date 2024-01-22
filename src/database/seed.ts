@@ -25,7 +25,7 @@ const generateFakerUser = async () => {
 };
 
 const seedUsers = async () => {
-  console.log("Start seed users", new Date());
+  console.log("Iniciado seed users", new Date());
 
   const users = await generateFakerUser();
 
@@ -45,7 +45,7 @@ const seedUsers = async () => {
       await client.query(query, values);
     }
 
-    console.log("Finish seed users", new Date());
+    console.log("Finalizado seed users", new Date());
   } catch (error) {
     console.error("Erro durante a inserção de usuários:", error);
   } finally {

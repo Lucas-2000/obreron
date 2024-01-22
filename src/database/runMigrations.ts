@@ -7,7 +7,7 @@ import { createConnection } from "./connection";
 
   const fileDatabaseDir = path.join(__dirname, "migrations");
 
-  console.log("Start migrations", new Date());
+  console.log("Iniciado migrations", new Date());
 
   fs.readdir(fileDatabaseDir, (err, files) => {
     if (err) {
@@ -24,6 +24,6 @@ import { createConnection } from "./connection";
       });
     });
 
-    console.log("Finish migrations", new Date());
+    console.log("Finalizado migrations", new Date());
   });
 })();
