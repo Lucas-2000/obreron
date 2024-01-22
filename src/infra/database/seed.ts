@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { createId } from "@paralleldrive/cuid2";
 import bcrypt from "bcrypt";
-import { User } from "../entities/User";
+import { User } from "../../entities/User";
 import { createConnection } from "./connection";
 
 const generateFakerUser = async () => {

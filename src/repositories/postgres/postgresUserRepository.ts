@@ -1,22 +1,30 @@
 import { Pool } from "pg";
 import { UsersRepository } from "../usersRepositories";
 import { User } from "../../entities/User";
-import { createConnection } from "../../database/connection";
+import { createConnection } from "../../infra/database/connection";
 
 export class PostgresUserRepository implements UsersRepository {
   private client: Pool;
 
   constructor() {
-    createConnection().then((client) => (this.client = client));
+    this.init();
   }
 
-  async create({ username, email, password }: User): Promise<void> {
+  private async init() {
+    this.client = await createConnection();
+  }
+
+  async create({ id, username, email, password }: User): Promise<void> {
+    if (!this.client) {
+      await this.init();
+    }
+
     const query = `
-    INSERT INTO users (username, email, password)
-    VALUES ($1, $2, $3);
+    INSERT INTO users (id, username, email, password)
+    VALUES ($1, $2, $3, $4);
     `;
 
-    const values = [username, email, password];
+    const values = [id, username, email, password];
 
     await this.client.query(query, values);
   }
@@ -33,6 +41,10 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async findById(id: string): Promise<User | null> {
+    if (!this.client) {
+      await this.init();
+    }
+
     const query = `
     SELECT * FROM users WHERE id = $1;
   `;
@@ -50,6 +62,10 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async findByUsername(username: string): Promise<User | null> {
+    if (!this.client) {
+      await this.init();
+    }
+
     const query = `
     SELECT * FROM users WHERE username = $1;
   `;
