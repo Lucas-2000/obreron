@@ -29,7 +29,7 @@ const seedUsers = async () => {
 
   const users = await generateFakerUser();
 
-  const { client } = await createConnection();
+  const client = await createConnection();
 
   try {
     await client.connect();
