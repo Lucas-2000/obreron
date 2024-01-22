@@ -6,18 +6,14 @@ import { createConnection } from "../../infra/database/connection";
 export class PostgresUserRepository implements UsersRepository {
   private client: Pool;
 
-  constructor() {
-    this.init();
-  }
-
-  private async init() {
-    this.client = await createConnection();
+  private async ensureConnection() {
+    if (!this.client) {
+      this.client = await createConnection();
+    }
   }
 
   async create({ id, username, email, password }: User): Promise<void> {
-    if (!this.client) {
-      await this.init();
-    }
+    await this.ensureConnection();
 
     const query = `
     INSERT INTO users (id, username, email, password)
@@ -30,6 +26,8 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async findAll(): Promise<User[]> {
+    await this.ensureConnection();
+
     const query = `
     SELECT * FROM users;
     `;
@@ -41,9 +39,7 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    if (!this.client) {
-      await this.init();
-    }
+    await this.ensureConnection();
 
     const query = `
     SELECT * FROM users WHERE id = $1;
@@ -62,9 +58,7 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async findByUsername(username: string): Promise<User | null> {
-    if (!this.client) {
-      await this.init();
-    }
+    await this.ensureConnection();
 
     const query = `
     SELECT * FROM users WHERE username = $1;
@@ -83,6 +77,8 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
+    await this.ensureConnection();
+
     const query = `
     SELECT * FROM users WHERE email = $1;
   `;
@@ -100,6 +96,8 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async findIndex(id: string): Promise<number> {
+    await this.ensureConnection();
+
     const query = "SELECT * FROM users";
     const result = await this.client.query(query);
 
@@ -117,6 +115,8 @@ export class PostgresUserRepository implements UsersRepository {
     password,
     updatedAt,
   }: User): Promise<void> {
+    await this.ensureConnection();
+
     const query = `
       UPDATE users 
       SET username = $2, email = $3, password = $4, updated_at = $5
@@ -129,6 +129,8 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async delete(id: string): Promise<void> {
+    await this.ensureConnection();
+
     const query = `
     DELETE FROM users 
     WHERE id = $1;
