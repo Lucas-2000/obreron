@@ -13,7 +13,7 @@ export class PostgresUserRepository implements UsersRepository {
   async create({ username, email, password }: User): Promise<void> {
     const query = `
     INSERT INTO users (username, email, password)
-    VALUES ($1, $2, $3)
+    VALUES ($1, $2, $3);
     `;
 
     const values = [username, email, password];
@@ -22,30 +22,104 @@ export class PostgresUserRepository implements UsersRepository {
   }
 
   async findAll(): Promise<User[]> {
-    throw new Error("Method not implemented.");
+    const query = `
+    SELECT * FROM users;
+    `;
+
+    const result = await this.client.query(query);
+    const users: User[] = result.rows;
+
+    return users;
   }
 
   async findById(id: string): Promise<User | null> {
-    throw new Error("Method not implemented.");
+    const query = `
+    SELECT * FROM users WHERE id = $1;
+  `;
+
+    const values = [id];
+
+    const result = await this.client.query(query, values);
+
+    if (result.rows.length > 0) {
+      const user: User = result.rows[0];
+      return user;
+    } else {
+      return null;
+    }
   }
 
   async findByUsername(username: string): Promise<User | null> {
-    throw new Error("Method not implemented.");
+    const query = `
+    SELECT * FROM users WHERE username = $1;
+  `;
+
+    const values = [username];
+
+    const result = await this.client.query(query, values);
+
+    if (result.rows.length > 0) {
+      const user: User = result.rows[0];
+      return user;
+    } else {
+      return null;
+    }
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    throw new Error("Method not implemented.");
+    const query = `
+    SELECT * FROM users WHERE email = $1;
+  `;
+
+    const values = [email];
+
+    const result = await this.client.query(query, values);
+
+    if (result.rows.length > 0) {
+      const user: User = result.rows[0];
+      return user;
+    } else {
+      return null;
+    }
   }
 
   async findIndex(id: string): Promise<number> {
-    throw new Error("Method not implemented.");
+    const query = "SELECT * FROM users";
+    const result = await this.client.query(query);
+
+    const index = result.rows.findIndex((user) => user.id === id);
+
+    if (index < 0) return -1;
+
+    return index;
   }
 
-  async update(user: User): Promise<void> {
-    throw new Error("Method not implemented.");
+  async update({
+    id,
+    username,
+    email,
+    password,
+    updatedAt,
+  }: User): Promise<void> {
+    const query = `
+      UPDATE users 
+      SET username = $2, email = $3, password = $4, updated_at = $5
+      WHERE id = $1;
+    `;
+
+    const values = [id, username, email, password, updatedAt ?? new Date()];
+
+    await this.client.query(query, values);
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    const query = `
+    DELETE FROM users 
+    WHERE id = $1;
+  `;
+
+    const values = [id];
+
+    await this.client.query(query, values);
   }
 }
