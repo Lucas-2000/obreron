@@ -1,4 +1,3 @@
-import { User } from "../../../entities/User";
 import { UsersRepository } from "../../../repositories/usersRepositories";
 
 type FindAllUsersResponse = {
