@@ -4,6 +4,8 @@ import { findAllUsersFactory } from "../../useCases/users/findAll/findAllUsersFa
 import { findUserByIdFactory } from "../../useCases/users/findById/findUserByIdFactory";
 import { updateUserFactory } from "../../useCases/users/update/updateUserFactory";
 import { deleteUserFactory } from "../../useCases/users/delete/deleteUserFactory";
+import { authUserFactory } from "../../useCases/users/auth/authUserFactory";
+import { ensureAuthenticated } from "../../middlewares/ensureAuthenticated";
 
 const userRoutes = Router();
 
@@ -21,12 +23,24 @@ userRoutes.get("/users", (req: Request, res: Response) => {
   }
 });
 
-userRoutes.patch("/users", (req: Request, res: Response) => {
-  return updateUserFactory().handle(req, res);
-});
+userRoutes.patch(
+  "/users",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
+    return updateUserFactory().handle(req, res);
+  }
+);
 
-userRoutes.delete("/users", (req: Request, res: Response) => {
-  return deleteUserFactory().handle(req, res);
+userRoutes.delete(
+  "/users",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
+    return deleteUserFactory().handle(req, res);
+  }
+);
+
+userRoutes.post("/users/auth", (req: Request, res: Response) => {
+  return authUserFactory().handle(req, res);
 });
 
 export { userRoutes };
