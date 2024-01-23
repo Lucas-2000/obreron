@@ -11,7 +11,7 @@ const generateFakerUser = async () => {
     const id = createId();
     const username = faker.internet.userName().toLowerCase();
     const email = faker.internet.email().toLowerCase();
-    const password = await bcrypt.hash("123456", 10);
+    const password = await bcrypt.hash("12345678", 10);
 
     users.push({
       id,
