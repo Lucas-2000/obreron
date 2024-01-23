@@ -108,22 +108,16 @@ export class PostgresUserRepository implements UsersRepository {
     return index;
   }
 
-  async update({
-    id,
-    username,
-    email,
-    password,
-    updatedAt,
-  }: User): Promise<void> {
+  async update(id: string, password: string, updatedAt?: Date): Promise<void> {
     await this.ensureConnection();
 
     const query = `
       UPDATE users 
-      SET username = $2, email = $3, password = $4, updated_at = $5
+      SET password = $2, updated_at = $3
       WHERE id = $1;
     `;
 
-    const values = [id, username, email, password, updatedAt ?? new Date()];
+    const values = [id, password, updatedAt ?? new Date()];
 
     await this.client.query(query, values);
   }

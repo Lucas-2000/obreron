@@ -38,11 +38,16 @@ export class InMemoryUsersRepository implements UsersRepository {
     return index;
   }
 
-  async update(user: User): Promise<void> {
-    const userToUpdate = this.users.find((u) => u.id === user.id);
+  async update(id: string, password: string, updatedAt?: Date): Promise<void> {
+    const userToUpdate = this.users.find((u) => u.id === id);
+
+    const updateDate = updatedAt || new Date();
 
     if (userToUpdate !== undefined) {
-      Object.assign(userToUpdate, user);
+      Object.assign(userToUpdate, {
+        password,
+        updatedAt: updateDate,
+      });
     }
   }
 

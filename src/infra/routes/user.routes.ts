@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { createUserFactory } from "../../useCases/users/create/createUserFactory";
 import { findAllUsersFactory } from "../../useCases/users/findAll/findAllUsersFactory";
 import { findUserByIdFactory } from "../../useCases/users/findById/findUserByIdFactory";
+import { updateUserFactory } from "../../useCases/users/update/updateUserFactory";
 
 const userRoutes = Router();
 
@@ -17,6 +18,10 @@ userRoutes.get("/users", (req: Request, res: Response) => {
   } else {
     return findAllUsersFactory().handle(req, res);
   }
+});
+
+userRoutes.patch("/users", (req: Request, res: Response) => {
+  return updateUserFactory().handle(req, res);
 });
 
 export { userRoutes };

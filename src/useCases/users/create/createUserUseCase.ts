@@ -33,15 +33,15 @@ export class CreateUserUseCase {
     if (emailAlreadyExists)
       return new CustomError(false, "Email já está em uso", 409);
 
-    if (userPassword.length < 8)
+    if (userPassword.trim().length < 8)
       return new CustomError(false, "Senha precisa ter mais 7 caracteres", 400);
 
     const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(userPassword, salt);
+    const hashedPassword = bcrypt.hashSync(userPassword.trim(), salt);
 
     const user = new User();
-    user.username = username;
-    user.email = email;
+    user.username = username.trim();
+    user.email = email.trim();
     user.password = hashedPassword;
 
     await this.usersRepository.create(user);
