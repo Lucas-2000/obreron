@@ -23,7 +23,7 @@ export class PostgresResetPasswordRepository
     await this.ensureConnection();
 
     const query = `
-    INSERT INTO reset_password (id, token, expiresIn, userId)
+    INSERT INTO reset_password (id, token, expires_in, user_id)
     VALUES ($1, $2, $3, $4);
     `;
 
@@ -61,6 +61,26 @@ export class PostgresResetPasswordRepository
     `;
 
     const values = [token];
+
+    const result = await this.client.query(query, values);
+
+    if (result.rows.length > 0) {
+      const resetPassword: ResetPassword = result.rows[0];
+      return resetPassword;
+    } else {
+      return null;
+    }
+  }
+
+  async findByUserId(userId: string): Promise<ResetPassword | null> {
+    await this.ensureConnection();
+
+    const query = `
+    SELECT * FROM reset_password
+    WHERE user_id = $1
+    `;
+
+    const values = [userId];
 
     const result = await this.client.query(query, values);
 

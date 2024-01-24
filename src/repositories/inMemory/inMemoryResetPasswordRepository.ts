@@ -26,6 +26,16 @@ export class InMemoryResetPasswordRepository
     return null;
   }
 
+  async findByUserId(userId: string): Promise<ResetPassword | null> {
+    const resetPassword = this.resetPasswordData.find(
+      (r) => r.userId === userId
+    );
+
+    if (resetPassword) return resetPassword;
+
+    return null;
+  }
+
   async findIndex(id: string): Promise<number> {
     const index = this.resetPasswordData.findIndex((r) => r.id === id);
 

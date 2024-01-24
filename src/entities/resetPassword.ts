@@ -8,12 +8,21 @@ export class ResetPassword {
   createdAt?: Date;
   updatedAt?: Date;
 
-  constructor(userId: string) {
+  constructor(userId: string, expirationMinutes: number = 10) {
     if (!this.id) {
       this.id = createId();
     }
 
+    if (!this.token) {
+      this.token = createId();
+    }
+
     this.userId = userId;
+
+    const currentTime = new Date();
+    this.expiresIn = new Date(
+      currentTime.getTime() + expirationMinutes * 60000
+    );
   }
 
   isExpired(): boolean {
