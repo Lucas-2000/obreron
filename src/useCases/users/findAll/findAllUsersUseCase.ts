@@ -1,4 +1,4 @@
-import { UsersRepository } from "../../../repositories/usersRepositories";
+import { UsersRepository } from "../../../repositories/usersRepository";
 
 type FindAllUsersResponse = {
   username: string;

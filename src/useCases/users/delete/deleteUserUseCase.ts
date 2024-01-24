@@ -1,4 +1,4 @@
-import { UsersRepository } from "./../../../repositories/usersRepositories";
+import { UsersRepository } from "../../../repositories/usersRepository";
 import { CustomError } from "./../../../utils/customError";
 
 interface DeleteUserRequest {

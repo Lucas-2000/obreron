@@ -1,5 +1,5 @@
+import { UsersRepository } from "./../usersRepository";
 import { Pool } from "pg";
-import { UsersRepository } from "../usersRepositories";
 import { User } from "../../entities/User";
 import { createConnection } from "../../infra/database/connection";
 

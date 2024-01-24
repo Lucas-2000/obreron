@@ -1,5 +1,5 @@
+import { UsersRepository } from "../../../repositories/usersRepository";
 import { CustomError } from "./../../../utils/customError";
-import { UsersRepository } from "./../../../repositories/usersRepositories";
 import bcrypt from "bcrypt";
 
 interface UpdateUserRequest {

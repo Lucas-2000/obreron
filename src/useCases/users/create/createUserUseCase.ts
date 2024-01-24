@@ -1,7 +1,7 @@
 import { User } from "../../../entities/User";
-import { UsersRepository } from "../../../repositories/usersRepositories";
 import bcrypt from "bcrypt";
 import { CustomError } from "../../../utils/customError";
+import { UsersRepository } from "../../../repositories/usersRepository";
 
 interface CreateUserRequest {
   username: string;
