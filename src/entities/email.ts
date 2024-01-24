@@ -19,12 +19,12 @@ export class Email {
     });
   }
 
-  private async sendEmail(options: EmailOptions): Promise<void> {
+  private async sendEmail({ to, subject, text }: EmailOptions): Promise<void> {
     const mailOptions: nodemailer.SendMailOptions = {
       from: process.env.EMAIL_FROM,
-      to: options.to,
-      subject: options.subject,
-      text: options.text,
+      to: to,
+      subject: subject,
+      text: text,
     };
 
     return this.transporter.sendMail(mailOptions);
