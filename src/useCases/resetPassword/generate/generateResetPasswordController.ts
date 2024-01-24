@@ -8,14 +8,14 @@ export class GenerateResetPasswordController {
   ) {}
 
   async handle(req: Request, res: Response) {
-    const { userId } = req.body;
+    const { email } = req.body;
 
-    const result = await this.generateResetPasswordUseCase.execute({ userId });
+    const result = await this.generateResetPasswordUseCase.execute({ email });
 
     if (result instanceof CustomError && result.success === false) {
       return res.status(result.statusCode).json({ error: result.message });
     }
 
-    return res.status(201).json(result);
+    return res.status(201).json({ message: "Token gerado e enviado no email" });
   }
 }
