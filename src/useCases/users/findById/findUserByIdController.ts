@@ -20,6 +20,6 @@ export class FindUserByIdController {
       return res.status(result.statusCode).json({ error: result.message });
     }
 
-    return res.status(201).json(result);
+    return res.status(200).json(result);
   }
 }

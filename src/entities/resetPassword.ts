@@ -19,13 +19,14 @@ export class ResetPassword {
 
     this.userId = userId;
 
-    const currentTime = new Date();
-    this.expiresIn = new Date(
-      currentTime.getTime() + expirationMinutes * 60000
-    );
-  }
+    const currentTimeBrazil = new Date().toLocaleString("en-US", {
+      timeZone: "America/Sao_Paulo",
+    });
 
-  isExpired(): boolean {
-    return this.expiresIn < new Date();
+    const currentDateTimeBrazil = new Date(currentTimeBrazil);
+
+    this.expiresIn = new Date(
+      currentDateTimeBrazil.getTime() + expirationMinutes * 60000
+    );
   }
 }

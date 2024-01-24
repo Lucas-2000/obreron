@@ -36,7 +36,15 @@ export class PostgresResetPasswordRepository
     await this.ensureConnection();
 
     const query = `
-    SELECT * FROM reset_password
+    SELECT 
+      id, 
+      token, 
+      expires_in as "expiresIn", 
+      user_id as "userId", 
+      created_at as "createdAt", 
+      updated_at as "updatedAt" 
+    FROM 
+      reset_password
     WHERE id = $1
     `;
 
@@ -56,7 +64,15 @@ export class PostgresResetPasswordRepository
     await this.ensureConnection();
 
     const query = `
-    SELECT * FROM reset_password
+    SELECT 
+      id, 
+      token, 
+      expires_in as "expiresIn", 
+      user_id as "userId", 
+      created_at as "createdAt", 
+      updated_at as "updatedAt" 
+    FROM 
+      reset_password
     WHERE token = $1
     `;
 
@@ -76,7 +92,15 @@ export class PostgresResetPasswordRepository
     await this.ensureConnection();
 
     const query = `
-    SELECT * FROM reset_password
+    SELECT 
+      id, 
+      token, 
+      expires_in as "expiresIn", 
+      user_id as "userId", 
+      created_at as "createdAt", 
+      updated_at as "updatedAt" 
+    FROM 
+      reset_password
     WHERE user_id = $1
     `;
 
