@@ -2,7 +2,7 @@ import { PostgresRestaurantsRepository } from "./../../../repositories/postgres/
 import { FindRestaurantByUserIdController } from "./findRestaurantByUserIdController";
 import { FindRestaurantByUserIdUseCase } from "./findRestaurantByUserIdUseCase";
 
-export const FindRestaurantByUserIdFactory = () => {
+export const findRestaurantByUserIdFactory = () => {
   const restaurantsRepository = new PostgresRestaurantsRepository();
   const findRestaurantByUserIdUseCase = new FindRestaurantByUserIdUseCase(
     restaurantsRepository

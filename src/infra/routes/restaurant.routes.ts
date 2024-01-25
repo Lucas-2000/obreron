@@ -1,4 +1,5 @@
-import { FindRestaurantByUserIdFactory } from "../../useCases/restaurants/findByUserId/findRestaurantByUserIdFactory";
+import { findRestaurantByUserIdFactory } from "../../useCases/restaurants/findByUserId/findRestaurantByUserIdFactory";
+import { updateRestaurantFactory } from "../../useCases/restaurants/update/updateRestaurantFactory";
 import { createRestaurantFactory } from "./../../useCases/restaurants/create/createRestaurantFactory";
 import { Request, Response, Router } from "express";
 
@@ -9,7 +10,11 @@ restaurantRoutes.post("/restaurants", (req: Request, res: Response) => {
 });
 
 restaurantRoutes.get("/restaurants", (req: Request, res: Response) => {
-  return FindRestaurantByUserIdFactory().handle(req, res);
+  return findRestaurantByUserIdFactory().handle(req, res);
+});
+
+restaurantRoutes.patch("/restaurants", (req: Request, res: Response) => {
+  return updateRestaurantFactory().handle(req, res);
 });
 
 export { restaurantRoutes };

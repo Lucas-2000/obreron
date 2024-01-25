@@ -135,6 +135,7 @@ export class PostgresRestaurantsRepository implements RestaurantsRepository {
     description,
     openingHour,
     closingHour,
+    updatedAt,
   }: Restaurant): Promise<void> {
     await this.ensureConnection();
 
@@ -147,8 +148,9 @@ export class PostgresRestaurantsRepository implements RestaurantsRepository {
       phone = $4,
       category = $5,
       description = $6,
-      opening_hour = $7,
-      closing_hour = $8
+      openinghour = $7,
+      closinghour = $8,
+      updated_at = $9
     WHERE 
       id = $1
   `;
@@ -162,6 +164,7 @@ export class PostgresRestaurantsRepository implements RestaurantsRepository {
       description,
       openingHour,
       closingHour,
+      updatedAt ?? new Date(),
     ];
 
     await this.client.query(query, values);
