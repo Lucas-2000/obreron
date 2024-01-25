@@ -21,6 +21,13 @@ export class FindResetPasswordByTokenUseCase {
   async execute({
     token,
   }: FindResetPasswordByTokenRequest): Promise<FindResetPasswordByTokenResponse> {
+    if (token.trim() === "")
+      return new CustomError(
+        false,
+        "Preencha todos os campos obrigatórios",
+        400
+      );
+
     const tokenExists = await this.resetPasswordRepository.findByToken(token);
 
     if (!tokenExists)

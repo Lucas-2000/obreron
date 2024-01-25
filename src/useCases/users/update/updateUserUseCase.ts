@@ -23,6 +23,13 @@ export class UpdateUserUseCase {
     password,
     rePassword,
   }: UpdateUserRequest): Promise<UpdateUserResponse> {
+    if (id.trim() === "" || password.trim() === "" || rePassword.trim() === "")
+      return new CustomError(
+        false,
+        "Preencha todos os campos obrigatórios",
+        400
+      );
+
     const userExists = await this.usersRepository.findById(id);
 
     if (!userExists)
@@ -45,13 +52,6 @@ export class UpdateUserUseCase {
 
     if (password.trim().length < 8 && rePassword.trim().length < 8)
       return new CustomError(false, "Senha precisa ter mais 7 caracteres", 400);
-
-    if (password.trim() === "" || rePassword.trim() === "")
-      return new CustomError(
-        false,
-        "Preencha todos os campos obrigatórios",
-        400
-      );
 
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password.trim(), salt);

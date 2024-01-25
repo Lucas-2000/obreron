@@ -21,6 +21,13 @@ export class CreateUserUseCase {
   }: CreateUserRequest): Promise<CreateUserResponse> {
     const userPassword = String(password);
 
+    if (username.trim() === "" || email.trim() === "" || password.trim() === "")
+      return new CustomError(
+        false,
+        "Preencha todos os campos obrigatórios",
+        400
+      );
+
     const usernameAlreadyExists = await this.usersRepository.findByUsername(
       username
     );
@@ -35,13 +42,6 @@ export class CreateUserUseCase {
 
     if (userPassword.trim().length < 8)
       return new CustomError(false, "Senha precisa ter mais 7 caracteres", 400);
-
-    if (username.trim() === "" || email.trim() === "" || password.trim() === "")
-      return new CustomError(
-        false,
-        "Preencha todos os campos obrigatórios",
-        400
-      );
 
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(userPassword.trim(), salt);

@@ -19,6 +19,13 @@ export class GenerateResetPasswordUseCase {
   async execute({
     email,
   }: GenerateResetPasswordRequest): Promise<GenerateResetPasswordResponse> {
+    if (email.trim() === "")
+      return new CustomError(
+        false,
+        "Preencha todos os campos obrigatórios",
+        400
+      );
+
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) return new CustomError(false, "Usuário não encontrado", 404);

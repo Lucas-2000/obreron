@@ -11,6 +11,13 @@ export class DeleteUserUseCase {
   constructor(private usersRepository: UsersRepository) {}
 
   async execute({ id }: DeleteUserRequest): Promise<DeleteUserResponse> {
+    if (id.trim() === "")
+      return new CustomError(
+        false,
+        "Preencha todos os campos obrigatórios",
+        400
+      );
+
     const userExists = await this.usersRepository.findById(id);
 
     if (!userExists)
