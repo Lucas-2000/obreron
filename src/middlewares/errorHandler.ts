@@ -11,6 +11,10 @@ export const errorHandler = (
     return res.status(err.statusCode).json({ error: err.message });
   }
 
-  const internalErrorResponse = new CustomError(false, "Erro interno", 500);
+  const internalErrorResponse = new CustomError(
+    false,
+    "Erro interno: " + err.message,
+    500
+  );
   return res.status(500).json(internalErrorResponse);
 };
