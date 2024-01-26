@@ -8,6 +8,7 @@ interface FindRestaurantByUserIdRequest {
 
 type FindRestaurantByUserIdResponse =
   | {
+      id: string;
       name: string;
       address: string;
       phone: string;
@@ -37,6 +38,7 @@ export class FindRestaurantByUserIdUseCase {
       return new CustomError(false, "Restaurante não encontrado", 404);
 
     return {
+      id: restaurant.id,
       name: restaurant.name,
       address: restaurant.address,
       phone: restaurant.phone,

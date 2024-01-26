@@ -9,9 +9,7 @@ interface AuthUserRequest {
   password: string;
 }
 
-type AuthUserResponse =
-  | { user: { username: string; email: string }; token: string }
-  | CustomError;
+type AuthUserResponse = { token: string } | CustomError;
 
 export class AuthUserUseCase {
   constructor(private usersRepository: UsersRepository) {}
@@ -35,18 +33,14 @@ export class AuthUserUseCase {
     if (!isPasswordEqual)
       return new CustomError(false, "Usuário e/ou senha incorretos", 400);
 
-    if (!jwtSecret) throw new Error("JWT Key not found!");
+    if (!jwtSecret) throw new Error("JWT Key não encontrada!");
 
     const token = sign({}, jwtSecret, {
-      subject: username,
+      subject: usernameExists.id,
       expiresIn: "3h",
     });
 
     return {
-      user: {
-        username,
-        email: usernameExists.email,
-      },
       token,
     };
   }

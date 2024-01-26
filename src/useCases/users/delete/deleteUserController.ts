@@ -1,17 +1,16 @@
 import { Request, Response } from "express";
 import { DeleteUserUseCase } from "./deleteUserUseCase";
 import { CustomError } from "../../../utils/customError";
+import { AuthenticatedRequest } from "../../../middlewares/ensureAuthenticated";
 
 export class DeleteUserController {
   constructor(private deleteUserUseCase: DeleteUserUseCase) {}
 
-  async handle(req: Request, res: Response) {
-    const id = req.query.id as string | undefined;
+  async handle(req: AuthenticatedRequest, res: Response) {
+    const id = req.userId;
 
-    if (id === undefined || typeof id !== "string") {
-      return res
-        .status(400)
-        .json({ error: "Inválido ou ID faltante na query." });
+    if (!id) {
+      return res.status(400).json({ error: "ID do usuário não encontrado." });
     }
 
     const result = await this.deleteUserUseCase.execute({ id });

@@ -1,19 +1,18 @@
 import { Request, Response } from "express";
 import { FindRestaurantByUserIdUseCase } from "./findRestaurantByUserIdUseCase";
 import { CustomError } from "../../../utils/customError";
+import { AuthenticatedRequest } from "../../../middlewares/ensureAuthenticated";
 
 export class FindRestaurantByUserIdController {
   constructor(
     private findRestaurantByUserIdUseCase: FindRestaurantByUserIdUseCase
   ) {}
 
-  async handle(req: Request, res: Response) {
-    const userId = req.query.userId as string | undefined;
+  async handle(req: AuthenticatedRequest, res: Response) {
+    const userId = req.userId;
 
-    if (userId === undefined || typeof userId !== "string") {
-      return res
-        .status(400)
-        .json({ error: "Inválido ou ID faltante na query." });
+    if (!userId) {
+      return res.status(400).json({ error: "ID do usuário não encontrado." });
     }
 
     const result = await this.findRestaurantByUserIdUseCase.execute({ userId });

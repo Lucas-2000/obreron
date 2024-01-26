@@ -1,12 +1,19 @@
 import { Request, Response } from "express";
 import { UpdateUserUseCase } from "./updateUserUseCase";
 import { CustomError } from "../../../utils/customError";
+import { AuthenticatedRequest } from "../../../middlewares/ensureAuthenticated";
 
 export class UpdateUserController {
   constructor(private updateUserUseCase: UpdateUserUseCase) {}
 
-  async handle(req: Request, res: Response) {
-    const { id, password, rePassword } = req.body;
+  async handle(req: AuthenticatedRequest, res: Response) {
+    const id = req.userId;
+
+    if (!id) {
+      return res.status(400).json({ error: "ID do usuário não encontrado." });
+    }
+
+    const { password, rePassword } = req.body;
 
     const result = await this.updateUserUseCase.execute({
       id,

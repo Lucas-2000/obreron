@@ -13,14 +13,16 @@ userRoutes.post("/users", (req: Request, res: Response) => {
   return createUserFactory().handle(req, res);
 });
 
-userRoutes.get("/users", (req: Request, res: Response) => {
-  const { id } = req.query;
-
-  if (id !== undefined && typeof id === "string") {
-    return findUserByIdFactory().handle(req, res);
-  } else {
+userRoutes.get(
+  "/users/all",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
     return findAllUsersFactory().handle(req, res);
   }
+);
+
+userRoutes.get("/users", ensureAuthenticated, (req: Request, res: Response) => {
+  return findUserByIdFactory().handle(req, res);
 });
 
 userRoutes.patch(
