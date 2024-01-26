@@ -7,6 +7,7 @@ interface CreateUserRequest {
   username: string;
   email: string;
   password: string;
+  rePassword: string;
 }
 
 type CreateUserResponse = void | CustomError;
@@ -18,10 +19,16 @@ export class CreateUserUseCase {
     username,
     email,
     password,
+    rePassword,
   }: CreateUserRequest): Promise<CreateUserResponse> {
     const userPassword = String(password);
 
-    if (username.trim() === "" || email.trim() === "" || password.trim() === "")
+    if (
+      username.trim() === "" ||
+      email.trim() === "" ||
+      password.trim() === "" ||
+      rePassword.trim() === ""
+    )
       return new CustomError(
         false,
         "Preencha todos os campos obrigatórios",
@@ -40,7 +47,10 @@ export class CreateUserUseCase {
     if (emailAlreadyExists)
       return new CustomError(false, "Email já está em uso", 409);
 
-    if (userPassword.trim().length < 8)
+    if (password.trim() !== rePassword.trim())
+      return new CustomError(false, "Senhas não coincidem", 400);
+
+    if (password.trim().length < 8 && rePassword.trim().length < 8)
       return new CustomError(false, "Senha precisa ter mais 7 caracteres", 400);
 
     const salt = bcrypt.genSaltSync(10);

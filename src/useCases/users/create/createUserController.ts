@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
 import { CreateUserUseCase } from "./createUserUseCase";
 import { CustomError } from "../../../utils/customError";
-import { User } from "../../../entities/User";
 
 export class CreateUserController {
   constructor(private createUserUseCase: CreateUserUseCase) {}
 
   async handle(req: Request, res: Response) {
-    const { username, email, password }: User = req.body;
+    const { username, email, password, rePassword } = req.body;
 
     const result = await this.createUserUseCase.execute({
       username,
       email,
       password,
+      rePassword,
     });
 
     if (result instanceof CustomError && result.success === false) {
