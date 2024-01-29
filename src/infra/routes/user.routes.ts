@@ -33,6 +33,10 @@ userRoutes.patch(
   }
 );
 
+userRoutes.patch("/users/:id", (req: Request, res: Response) => {
+  return updateUserFactory().handle(req, res);
+});
+
 userRoutes.delete(
   "/users",
   ensureAuthenticated,

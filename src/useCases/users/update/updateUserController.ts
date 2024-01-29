@@ -7,7 +7,7 @@ export class UpdateUserController {
   constructor(private updateUserUseCase: UpdateUserUseCase) {}
 
   async handle(req: AuthenticatedRequest, res: Response) {
-    const id = req.userId;
+    const id = req.params.id || req.userId;
 
     if (!id) {
       return res.status(400).json({ error: "ID do usuário não encontrado." });
@@ -25,6 +25,6 @@ export class UpdateUserController {
       return res.status(result.statusCode).json({ error: result.message });
     }
 
-    return res.status(200).json(result);
+    return res.status(200).json({ message: "Usuário atualizado com sucesso!" });
   }
 }

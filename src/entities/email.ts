@@ -37,7 +37,7 @@ export class Email {
     const emailOptions = {
       to: userEmail,
       subject: "Redefinição de Senha",
-      text: `Você solicitou a redefinição de senha. Clique no link a seguir para redefinir sua senha: http://localhost:3000/${token}`,
+      text: `Você solicitou a redefinição de senha. Clique no link a seguir para redefinir sua senha: http://localhost:5173/reset-password/${token}`,
     };
 
     return await this.sendEmail(emailOptions);
