@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 
-export class Items {
+export class Item {
   id: string;
   name: string;
   description: string;

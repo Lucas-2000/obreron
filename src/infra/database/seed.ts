@@ -3,7 +3,7 @@ import { createId } from "@paralleldrive/cuid2";
 import bcrypt from "bcrypt";
 import { User } from "../../entities/User";
 import { createConnection } from "./connection";
-import { Items } from "../../entities/items";
+import { Item } from "../../entities/item";
 
 const generateFakerUser = async () => {
   const users: User[] = [];
@@ -26,7 +26,7 @@ const generateFakerUser = async () => {
 };
 
 const generateFakerItems = async () => {
-  const items: Items[] = [];
+  const items: Item[] = [];
 
   for (let i = 0; i < 20; i++) {
     const id = createId();

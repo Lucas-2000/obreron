@@ -45,7 +45,7 @@ export class PostgresRestaurantsRepository implements RestaurantsRepository {
     await this.client.query(query, values);
   }
 
-  async findById(userId: string): Promise<Restaurant | null> {
+  async findById(id: string): Promise<Restaurant | null> {
     await this.ensureConnection();
 
     const query = `
@@ -67,7 +67,7 @@ export class PostgresRestaurantsRepository implements RestaurantsRepository {
       id = $1;
     `;
 
-    const values = [userId];
+    const values = [id];
 
     const result = await this.client.query(query, values);
 

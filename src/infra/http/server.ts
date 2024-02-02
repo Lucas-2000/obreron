@@ -4,6 +4,7 @@ import cors from "cors";
 import { userRoutes } from "../routes/user.routes";
 import { resetPasswordRoutes } from "../routes/resetPassword.routes";
 import { restaurantRoutes } from "../routes/restaurant.routes";
+import { itemRoutes } from "../routes/item.routes";
 import { errorHandler } from "../../middlewares/errorHandler";
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(userRoutes);
 app.use(resetPasswordRoutes);
 app.use(restaurantRoutes);
+app.use(itemRoutes);
 
 app.use(errorHandler);
 
