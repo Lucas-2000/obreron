@@ -14,10 +14,10 @@ export class InMemoryItemsRepository implements ItemsRepository {
     return item || null;
   }
 
-  async findByUserId(userId: string): Promise<Item | null> {
-    const item = this.items.find((r) => r.userId === userId);
+  async findByUserId(userId: string): Promise<Item[] | null> {
+    const items = this.items.filter((r) => r.userId === userId);
 
-    return item || null;
+    return items.length > 0 ? items : null;
   }
 
   async findIndex(id: string): Promise<number> {

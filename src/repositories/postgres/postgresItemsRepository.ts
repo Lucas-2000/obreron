@@ -83,7 +83,7 @@ export class PostgresItemsRepository implements ItemsRepository {
     }
   }
 
-  async findByUserId(userId: string): Promise<Item | null> {
+  async findByUserId(userId: string): Promise<Item[] | null> {
     await this.ensureConnection();
 
     const query = `
@@ -109,10 +109,10 @@ export class PostgresItemsRepository implements ItemsRepository {
     const result = await this.client.query(query, values);
 
     if (result.rows.length > 0) {
-      const item: Item = result.rows[0];
-      return item;
+      const items: Item[] = result.rows;
+      return items;
     } else {
-      return null;
+      return [];
     }
   }
 
