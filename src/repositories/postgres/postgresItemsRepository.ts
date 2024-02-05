@@ -58,11 +58,11 @@ export class PostgresItemsRepository implements ItemsRepository {
       id,
       name,
       description,
-      priceInCents as "price_in_cents",
+      price_in_cents as "priceInCents",
       available,
-      preparationTime as "preparation_time",
+      preparation_time as "preparationTime",
       ingredients,
-      userId as "user_id",
+      user_id as "userId",
       created_at as "createdAt",
       updated_at as "updatedAt"
     FROM
@@ -152,8 +152,6 @@ export class PostgresItemsRepository implements ItemsRepository {
       preparation_time = $6,
       ingredients = $7,
       updated_at = $8
-    FROM
-      items
     WHERE
       id = $1;
   `;
