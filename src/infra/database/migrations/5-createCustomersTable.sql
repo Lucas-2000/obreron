@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS customers (
+  id TEXT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  birth_date DATE NOT NULL,
+  phone VARCHAR(20) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  gender CHAR(1) CHECK (gender IN ('M', 'F')) NOT NULL,
+  is_active BOOLEAN DEFAULT true,
+  observation TEXT,
+  user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);

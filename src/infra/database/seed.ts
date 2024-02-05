@@ -1,3 +1,4 @@
+import { Customer, EnumCustomerGender } from "./../../entities/customer";
 import { faker } from "@faker-js/faker";
 import { createId } from "@paralleldrive/cuid2";
 import bcrypt from "bcrypt";
@@ -58,6 +59,39 @@ const generateFakerItems = async () => {
   }
 
   return items;
+};
+
+export const generateFakerCustomers = async () => {
+  const customers: Customer[] = [];
+
+  for (let i = 0; i < 20; i++) {
+    const id = createId();
+    const name = faker.person.fullName();
+    const birthDateStr = `${faker.number.int({
+      min: 1,
+      max: 28,
+    })}/${faker.number.int({
+      min: 1,
+      max: 12,
+    })}/1990`;
+    const isActive = true;
+    const userId = "pnaqoo7sqpxhzk8mmtk7ia1y";
+
+    const customer = new Customer(userId, birthDateStr, isActive);
+    customer.id = id;
+    customer.name = name;
+    customer.phone = "11911111111";
+    customer.address = faker.location.streetAddress();
+    customer.email = faker.internet.email();
+    customer.gender = faker.helpers.enumValue(EnumCustomerGender);
+    customer.observation = faker.lorem.sentence();
+    customer.createdAt = new Date();
+    customer.updatedAt = new Date();
+
+    customers.push(customer);
+  }
+
+  return customers;
 };
 
 const seedUsers = async () => {
@@ -127,5 +161,48 @@ const seedItems = async () => {
   }
 };
 
-seedUsers();
-seedItems();
+const seedCustomers = async () => {
+  console.log("Iniciado seed customers", new Date());
+
+  const customers = await generateFakerCustomers();
+
+  const client = await createConnection();
+
+  try {
+    await client.connect();
+
+    for (const customer of customers) {
+      const query = `
+        INSERT INTO customers (id, name, birth_date, phone, address, email, gender, is_active, observation, user_id, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      `;
+
+      const values = [
+        customer.id,
+        customer.name,
+        customer.birthDate,
+        customer.phone,
+        customer.address,
+        customer.email,
+        customer.gender,
+        customer.isActive,
+        customer.observation,
+        customer.userId,
+        customer.createdAt,
+        customer.updatedAt,
+      ];
+
+      await client.query(query, values);
+    }
+
+    console.log("Finalizado seed customers", new Date());
+  } catch (error) {
+    console.error("Erro durante a inserção de customers:", error);
+  } finally {
+    await client.end();
+  }
+};
+
+// seedUsers();
+// seedItems();
+seedCustomers();
