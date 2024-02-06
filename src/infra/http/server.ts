@@ -6,6 +6,7 @@ import { resetPasswordRoutes } from "../routes/resetPassword.routes";
 import { restaurantRoutes } from "../routes/restaurant.routes";
 import { itemRoutes } from "../routes/item.routes";
 import { errorHandler } from "../../middlewares/errorHandler";
+import { customerRoutes } from "../routes/customer.routes";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(userRoutes);
 app.use(resetPasswordRoutes);
 app.use(restaurantRoutes);
 app.use(itemRoutes);
+app.use(customerRoutes);
 
 app.use(errorHandler);
 

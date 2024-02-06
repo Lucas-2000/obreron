@@ -1,5 +1,4 @@
 import { Pool } from "pg";
-import { Item } from "../../entities/item";
 import { createConnection } from "../../infra/database/connection";
 import { CustomersRepository } from "../customersRepository";
 import { Customer } from "../../entities/customer";
