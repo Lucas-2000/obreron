@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { ensureAuthenticated } from "../../middlewares/ensureAuthenticated";
 import { createCustomerFactory } from "../../useCases/customers/create/createCustomerFactory";
+import { findCustomersByUserIdFactory } from "./../../useCases/customers/findByUserId/findCustomersByUserIdFactory";
 
 const customerRoutes = Router();
 
@@ -9,6 +10,14 @@ customerRoutes.post(
   ensureAuthenticated,
   (req: Request, res: Response) => {
     return createCustomerFactory().handle(req, res);
+  }
+);
+
+customerRoutes.get(
+  "/customers",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
+    return findCustomersByUserIdFactory().handle(req, res);
   }
 );
 
