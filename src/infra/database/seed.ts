@@ -54,7 +54,7 @@ const generateFakerItems = async () => {
       available,
       preparationTime,
       ingredients,
-      userId: "pnaqoo7sqpxhzk8mmtk7ia1y",
+      userId: "ra8lhv5fdcpq2b7s1zi15k3p",
     });
   }
 
@@ -75,7 +75,7 @@ export const generateFakerCustomers = async () => {
       max: 12,
     })}/1990`;
     const isActive = true;
-    const userId = "pnaqoo7sqpxhzk8mmtk7ia1y";
+    const userId = "ra8lhv5fdcpq2b7s1zi15k3p";
 
     const customer = new Customer(userId, birthDateStr, isActive);
     customer.id = id;
@@ -203,6 +203,6 @@ const seedCustomers = async () => {
   }
 };
 
-// seedUsers();
-// seedItems();
+seedUsers();
+seedItems();
 seedCustomers();
