@@ -1,31 +1,33 @@
 import { Request, Response } from "express";
-import { UpdateRestaurantUseCase } from "./updateRestaurantUseCase";
+import { UpdateCustomerUseCase } from "./updateCustomerUseCase";
 import { CustomError } from "../../../utils/customError";
 
-export class UpdateRestaurantController {
-  constructor(private updateRestaurantUseCase: UpdateRestaurantUseCase) {}
+export class UpdateCustomerController {
+  constructor(private updateCustomerUseCase: UpdateCustomerUseCase) {}
 
   async handle(req: Request, res: Response) {
     const {
       id,
       name,
-      address,
+      birthDate,
       phone,
-      category,
-      description,
-      openingHour,
-      closingHour,
+      address,
+      email,
+      gender,
+      isActive,
+      observation,
     } = req.body;
 
-    const result = await this.updateRestaurantUseCase.execute({
+    const result = await this.updateCustomerUseCase.execute({
       id,
       name,
-      address,
+      birthDate,
       phone,
-      category,
-      description,
-      openingHour,
-      closingHour,
+      address,
+      email,
+      gender,
+      isActive,
+      observation,
     });
 
     if (result instanceof CustomError && result.success === false) {
