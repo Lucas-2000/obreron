@@ -15,7 +15,6 @@ import { createId } from "@paralleldrive/cuid2";
 
 interface CreateOrderRequest {
   address: string;
-  amount: number;
   paymentType: EnumPaymentType;
   deliveryStatus: EnumDeliveryStatus;
   userId: string;
@@ -38,7 +37,6 @@ export class CreateOrderUseCase {
 
   async execute({
     address,
-    amount,
     paymentType,
     deliveryStatus,
     userId,
@@ -48,7 +46,6 @@ export class CreateOrderUseCase {
   }: CreateOrderRequest): Promise<CreateOrderResponse> {
     if (
       address.trim() === "" ||
-      amount === null ||
       paymentType === null ||
       deliveryStatus === null ||
       userId.trim() === "" ||
@@ -89,28 +86,34 @@ export class CreateOrderUseCase {
     if (!validDeliveryStatus.includes(deliveryStatus))
       return new CustomError(false, "Status inválido", 404);
 
+    let amount = 0;
+
     const order = new Order(userId, restaurantId, customerId);
     order.id = createId();
     order.address = address;
-    order.amount = amount;
     order.deliveryStatus = deliveryStatus;
     order.paymentType = paymentType;
+    order.amount = amount;
 
     await this.ordersRepository.create(order);
 
-    await Promise.all(
-      orderItems.map(async (oItem) => {
-        const itemExists = await this.itemsRepository.findById(oItem.itemId);
+    for (const oItem of orderItems) {
+      const itemExists = await this.itemsRepository.findById(oItem.itemId);
 
-        if (!itemExists)
-          return new CustomError(false, "Item não encontrado", 404);
+      if (!itemExists)
+        return new CustomError(false, "Item não encontrado", 404);
 
-        const orderItem = new OrderItem(oItem.itemId, order.id);
-        orderItem.notes = oItem.notes;
-        orderItem.quantity = oItem.quantity;
+      const orderItem = new OrderItem(oItem.itemId, order.id);
+      orderItem.notes = oItem.notes;
+      orderItem.quantity = oItem.quantity;
 
-        await this.orderItemsRepository.create(orderItem);
-      })
-    );
+      amount += oItem.quantity * itemExists.priceInCents;
+
+      await this.orderItemsRepository.create(orderItem);
+    }
+
+    order.amount = amount;
+
+    await this.ordersRepository.update(order);
   }
 }

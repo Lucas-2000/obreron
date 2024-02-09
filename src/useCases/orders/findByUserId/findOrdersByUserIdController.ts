@@ -1,10 +1,10 @@
 import { Response } from "express";
 import { AuthenticatedRequest } from "../../../middlewares/ensureAuthenticated";
-import { CreateOrderUseCase } from "./createOrderUseCase";
 import { CustomError } from "../../../utils/customError";
+import { FindOrdersByUserIdUseCase } from "./findOrdersByUserIdUseCase";
 
-export class CreateOrderController {
-  constructor(private createOrderUseCase: CreateOrderUseCase) {}
+export class FindOrdersByUserIdController {
+  constructor(private findOrdersByUserIdUseCase: FindOrdersByUserIdUseCase) {}
 
   async handle(req: AuthenticatedRequest, res: Response) {
     const userId = req.userId;
@@ -13,29 +13,14 @@ export class CreateOrderController {
       return res.status(400).json({ error: "ID do usuário não encontrado." });
     }
 
-    const {
-      address,
-      paymentType,
-      deliveryStatus,
-      restaurantId,
-      customerId,
-      orderItems,
-    } = req.body;
-
-    const result = await this.createOrderUseCase.execute({
-      address,
-      paymentType,
-      deliveryStatus,
+    const result = await this.findOrdersByUserIdUseCase.execute({
       userId,
-      restaurantId,
-      customerId,
-      orderItems,
     });
 
     if (result instanceof CustomError && result.success === false) {
       return res.status(result.statusCode).json({ error: result.message });
     }
 
-    return res.status(201).json({ message: "Pedido criado com sucesso!" });
+    return res.status(200).json(result);
   }
 }

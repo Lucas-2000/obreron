@@ -7,6 +7,7 @@ import { restaurantRoutes } from "../routes/restaurant.routes";
 import { itemRoutes } from "../routes/item.routes";
 import { errorHandler } from "../../middlewares/errorHandler";
 import { customerRoutes } from "../routes/customer.routes";
+import { orderRoutes } from "../routes/order.routes";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(resetPasswordRoutes);
 app.use(restaurantRoutes);
 app.use(itemRoutes);
 app.use(customerRoutes);
+app.use(orderRoutes);
 
 app.use(errorHandler);
 

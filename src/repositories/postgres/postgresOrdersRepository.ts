@@ -109,7 +109,7 @@ export class PostgresOrdersRepository implements OrdersRepository {
     const result = await this.client.query(query, values);
 
     if (result.rows.length > 0) {
-      const order: Order[] = result.rows[0];
+      const order: Order[] = result.rows;
       return order;
     } else {
       return [];
@@ -142,7 +142,7 @@ export class PostgresOrdersRepository implements OrdersRepository {
     const result = await this.client.query(query, values);
 
     if (result.rows.length > 0) {
-      const order: Order[] = result.rows[0];
+      const order: Order[] = result.rows;
       return order;
     } else {
       return [];
@@ -183,7 +183,7 @@ export class PostgresOrdersRepository implements OrdersRepository {
       amount = $3,
       payment_type = $4,
       delivery_status = $5,
-      use_id = $6,
+      user_id = $6,
       restaurant_id = $7,
       customer_id = $8,
       updated_at = $9

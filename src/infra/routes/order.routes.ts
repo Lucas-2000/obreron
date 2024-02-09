@@ -1,3 +1,4 @@
+import { findOrdersByUserIdFactory } from "./../../useCases/orders/findByUserId/findOrdersByUserIdFactory";
 import { Request, Response, Router } from "express";
 import { ensureAuthenticated } from "../../middlewares/ensureAuthenticated";
 import { createOrderFactory } from "../../useCases/orders/create/createOrderFactory";
@@ -9,6 +10,14 @@ orderRoutes.post(
   ensureAuthenticated,
   (req: Request, res: Response) => {
     return createOrderFactory().handle(req, res);
+  }
+);
+
+orderRoutes.get(
+  "/orders/user",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
+    return findOrdersByUserIdFactory().handle(req, res);
   }
 );
 

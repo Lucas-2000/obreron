@@ -61,7 +61,7 @@ export class PostgresOrderItemsRepository implements OrderItemsRepository {
     const result = await this.client.query(query, [orderId]);
 
     if (result.rows.length > 0) {
-      const orderItems: OrderItem[] = result.rows[0];
+      const orderItems: OrderItem[] = result.rows;
       return orderItems;
     } else {
       return [];
