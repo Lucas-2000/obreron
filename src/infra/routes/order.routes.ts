@@ -1,3 +1,4 @@
+import { findOrdersByCustomerIdFactory } from "./../../useCases/orders/findByCustomer/findOrdersByCustomerIdFactory";
 import { findOrdersByUserIdAndDeliveryStatusFactory } from "./../../useCases/orders/findByUserIdAndDeliveryStatus/findOrdersByUserIdAndDeliveryStatusFactory";
 import { findOrdersByUserIdFactory } from "./../../useCases/orders/findByUserId/findOrdersByUserIdFactory";
 import { Request, Response, Router } from "express";
@@ -36,6 +37,14 @@ orderRoutes.get(
   ensureAuthenticated,
   (req: Request, res: Response) => {
     return findOrdersByUserIdAndDeliveryStatusFactory().handle(req, res);
+  }
+);
+
+orderRoutes.get(
+  "/orders/customer/:customerId",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
+    return findOrdersByCustomerIdFactory().handle(req, res);
   }
 );
 
