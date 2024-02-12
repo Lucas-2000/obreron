@@ -6,6 +6,7 @@ import { ensureAuthenticated } from "../../middlewares/ensureAuthenticated";
 import { createOrderFactory } from "../../useCases/orders/create/createOrderFactory";
 import { findOrdersByUserIdAndActiveFactory } from "../../useCases/orders/findByUserIdAndActive/findOrdersByUserIdAndActiveFactory";
 import { updateOrderFactory } from "../../useCases/orders/update/updateOrderFactory";
+import { deleteOrderFactory } from "../../useCases/orders/delete/deleteOrderFactory";
 
 const orderRoutes = Router();
 
@@ -54,6 +55,14 @@ orderRoutes.patch(
   ensureAuthenticated,
   (req: Request, res: Response) => {
     return updateOrderFactory().handle(req, res);
+  }
+);
+
+orderRoutes.delete(
+  "/orders",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
+    return deleteOrderFactory().handle(req, res);
   }
 );
 
