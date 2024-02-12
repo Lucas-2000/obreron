@@ -1,4 +1,4 @@
-import { Order } from "./../entities/order";
+import { EnumDeliveryStatus, Order } from "./../entities/order";
 
 export interface OrdersRepository {
   create(order: Order): Promise<void>;
@@ -7,6 +7,10 @@ export interface OrdersRepository {
   findByUserIdAndActive(
     userId: string,
     delivered: string
+  ): Promise<Order[] | null>;
+  findByUserIdAndDeliveryStatus(
+    userId: string,
+    deliveryStatus: EnumDeliveryStatus
   ): Promise<Order[] | null>;
   findByCustomerId(customerId: string): Promise<Order[] | null>;
   findIndex(id: string): Promise<number>;

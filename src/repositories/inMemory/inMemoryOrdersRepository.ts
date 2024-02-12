@@ -1,4 +1,4 @@
-import { Order } from "../../entities/order";
+import { EnumDeliveryStatus, Order } from "../../entities/order";
 import { OrdersRepository } from "../ordersRepository";
 
 export class InMemoryOrdersRepository implements OrdersRepository {
@@ -26,6 +26,17 @@ export class InMemoryOrdersRepository implements OrdersRepository {
   ): Promise<Order[] | null> {
     const orders = this.orders.filter(
       (r) => r.userId === userId && r.deliveryStatus !== delivered
+    );
+
+    return orders.length > 0 ? orders : null;
+  }
+
+  async findByUserIdAndDeliveryStatus(
+    userId: string,
+    deliveryStatus: EnumDeliveryStatus
+  ): Promise<Order[] | null> {
+    const orders = this.orders.filter(
+      (r) => r.userId === userId && r.deliveryStatus === deliveryStatus
     );
 
     return orders.length > 0 ? orders : null;

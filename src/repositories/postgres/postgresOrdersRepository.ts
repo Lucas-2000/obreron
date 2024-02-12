@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { OrdersRepository } from "../ordersRepository";
 import { createConnection } from "../../infra/database/connection";
-import { Order } from "../../entities/order";
+import { EnumDeliveryStatus, Order } from "../../entities/order";
 
 export class PostgresOrdersRepository implements OrdersRepository {
   private client: Pool;
@@ -143,6 +143,44 @@ export class PostgresOrdersRepository implements OrdersRepository {
     `;
 
     const values = [userId, delivered];
+
+    const result = await this.client.query(query, values);
+
+    if (result.rows.length > 0) {
+      const order: Order[] = result.rows;
+      return order;
+    } else {
+      return [];
+    }
+  }
+
+  async findByUserIdAndDeliveryStatus(
+    userId: string,
+    deliveryStatus: EnumDeliveryStatus
+  ): Promise<Order[] | null> {
+    await this.ensureConnection();
+
+    const query = `
+    SELECT
+      id,
+      address,
+      amount,
+      payment_type as "paymentType",
+      delivery_status as "deliveryStatus",
+      user_id as "userId",
+      restaurant_id as "restaurantId",
+      customer_id as "customerId",
+      created_at as "createdAt",
+      updated_at as "updatedAt"
+    FROM
+      orders
+    WHERE
+      user_id = $1
+    AND
+      delivery_status like $2;
+    `;
+
+    const values = [userId, deliveryStatus];
 
     const result = await this.client.query(query, values);
 
