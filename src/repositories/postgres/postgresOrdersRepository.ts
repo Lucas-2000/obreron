@@ -116,6 +116,44 @@ export class PostgresOrdersRepository implements OrdersRepository {
     }
   }
 
+  async findByUserIdAndActive(
+    userId: string,
+    delivered: string
+  ): Promise<Order[] | null> {
+    await this.ensureConnection();
+
+    const query = `
+    SELECT
+      id,
+      address,
+      amount,
+      payment_type as "paymentType",
+      delivery_status as "deliveryStatus",
+      user_id as "userId",
+      restaurant_id as "restaurantId",
+      customer_id as "customerId",
+      created_at as "createdAt",
+      updated_at as "updatedAt"
+    FROM
+      orders
+    WHERE
+      user_id = $1
+    AND
+      delivery_status != $2;
+    `;
+
+    const values = [userId, delivered];
+
+    const result = await this.client.query(query, values);
+
+    if (result.rows.length > 0) {
+      const order: Order[] = result.rows;
+      return order;
+    } else {
+      return [];
+    }
+  }
+
   async findByCustomerId(customerId: string): Promise<Order[] | null> {
     await this.ensureConnection();
 

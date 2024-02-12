@@ -20,6 +20,17 @@ export class InMemoryOrdersRepository implements OrdersRepository {
     return orders.length > 0 ? orders : null;
   }
 
+  async findByUserIdAndActive(
+    userId: string,
+    delivered: string
+  ): Promise<Order[] | null> {
+    const orders = this.orders.filter(
+      (r) => r.userId === userId && r.deliveryStatus !== delivered
+    );
+
+    return orders.length > 0 ? orders : null;
+  }
+
   async findByCustomerId(customerId: string): Promise<Order[] | null> {
     const orders = this.orders.filter((r) => r.customerId === customerId);
 
