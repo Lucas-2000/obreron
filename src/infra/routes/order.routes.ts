@@ -5,6 +5,7 @@ import { Request, Response, Router } from "express";
 import { ensureAuthenticated } from "../../middlewares/ensureAuthenticated";
 import { createOrderFactory } from "../../useCases/orders/create/createOrderFactory";
 import { findOrdersByUserIdAndActiveFactory } from "../../useCases/orders/findByUserIdAndActive/findOrdersByUserIdAndActiveFactory";
+import { updateOrderFactory } from "../../useCases/orders/update/updateOrderFactory";
 
 const orderRoutes = Router();
 
@@ -45,6 +46,14 @@ orderRoutes.get(
   ensureAuthenticated,
   (req: Request, res: Response) => {
     return findOrdersByCustomerIdFactory().handle(req, res);
+  }
+);
+
+orderRoutes.patch(
+  "/orders",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
+    return updateOrderFactory().handle(req, res);
   }
 );
 
