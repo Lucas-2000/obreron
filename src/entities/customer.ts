@@ -19,18 +19,9 @@ export class Customer {
   createdAt?: Date;
   updatedAt?: Date;
 
-  constructor(userId: string, birthDateStr: string, isActive: boolean = true) {
+  constructor(userId: string, isActive: boolean = true) {
     if (!this.id) {
       this.id = createId();
-    }
-
-    if (birthDateStr) {
-      const [day, month, year] = birthDateStr.split("/").map(Number);
-      this.birthDate = new Date(year, month - 1, day);
-    } else {
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0);
-      this.birthDate = currentDate;
     }
 
     this.isActive = isActive;

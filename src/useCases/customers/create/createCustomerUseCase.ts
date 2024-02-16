@@ -57,8 +57,12 @@ export class CreateCustomerUseCase {
     if (!validGender.includes(gender))
       return new CustomError(false, "Gênero inválido", 404);
 
-    const customer = new Customer(userId, birthDate);
+    const [day, month, year] = birthDate.split("/").map(Number);
+    const formattedBirthDate = new Date(year, month - 1, day);
+
+    const customer = new Customer(userId);
     customer.name = name;
+    customer.birthDate = formattedBirthDate;
     customer.phone = phone;
     customer.address = address;
     customer.email = email;

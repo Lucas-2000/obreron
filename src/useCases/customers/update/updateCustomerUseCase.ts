@@ -5,7 +5,7 @@ import { CustomError } from "../../../utils/customError";
 interface UpdateCustomerRequest {
   id: string;
   name: string;
-  birthDate: Date;
+  birthDate: string;
   phone: string;
   address: string;
   email: string;
@@ -17,7 +17,7 @@ interface UpdateCustomerRequest {
 type UpdateCustomerResponse =
   | {
       name: string;
-      birthDate: Date;
+      birthDate: string;
       phone: string;
       address: string;
       email: string;
@@ -66,10 +66,13 @@ export class UpdateCustomerUseCase {
     if (!validGender.includes(gender))
       return new CustomError(false, "Gênero inválido", 404);
 
+    const [day, month, year] = birthDate.split("/").map(Number);
+    const formattedBirthDate = new Date(year, month - 1, day);
+
     await this.customersRepository.update({
       id,
       name,
-      birthDate,
+      birthDate: formattedBirthDate,
       phone,
       address,
       email,
