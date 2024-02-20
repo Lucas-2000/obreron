@@ -2,14 +2,17 @@ import { FindOrdersByUserIdAndActiveController } from "./findOrdersByUserIdAndAc
 import { FindOrdersByUserIdAndActiveUseCase } from "./findOrdersByUserIdAndActiveUseCase";
 import { PostgresOrderItemsRepository } from "../../../repositories/postgres/postgresOrderItemsRepository";
 import { PostgresOrdersRepository } from "../../../repositories/postgres/postgresOrdersRepository";
+import { PostgresCustomersRepository } from "../../../repositories/postgres/postgresCustomersRepository";
 
 export const findOrdersByUserIdAndActiveFactory = () => {
   const ordersRepository = new PostgresOrdersRepository();
   const orderItemsRepository = new PostgresOrderItemsRepository();
+  const customersRepository = new PostgresCustomersRepository();
   const findOrdersByUserIdAndActiveUseCase =
     new FindOrdersByUserIdAndActiveUseCase(
       ordersRepository,
-      orderItemsRepository
+      orderItemsRepository,
+      customersRepository
     );
   const findOrdersByUserIdAndActiveController =
     new FindOrdersByUserIdAndActiveController(

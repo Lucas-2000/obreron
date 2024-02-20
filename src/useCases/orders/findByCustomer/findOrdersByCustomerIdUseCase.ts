@@ -17,7 +17,9 @@ type FindOrdersByCustomerIdResponse =
       deliveryStatus: EnumDeliveryStatus;
       userId: string;
       restaurantId: string;
-      customerId: string;
+      customer: {
+        name: string;
+      };
       orderItems: {
         quantity: number;
         notes: string;
@@ -64,7 +66,9 @@ export class FindOrdersByCustomerIdUseCase {
       deliveryStatus: EnumDeliveryStatus;
       userId: string;
       restaurantId: string;
-      customerId: string;
+      customer: {
+        name: string;
+      };
       orderItems: {
         quantity: number;
         notes: string;
@@ -89,7 +93,9 @@ export class FindOrdersByCustomerIdUseCase {
         deliveryStatus: order.deliveryStatus,
         userId: order.userId,
         restaurantId: order.restaurantId,
-        customerId: order.customerId,
+        customer: {
+          name: customers.name,
+        },
         orderItems: orderItems.map((item) => ({
           quantity: item.quantity,
           notes: item.notes,

@@ -1,4 +1,5 @@
 import { EnumDeliveryStatus, EnumPaymentType } from "../../../entities/order";
+import { CustomersRepository } from "../../../repositories/customersRepository";
 import { OrderItemsRepository } from "../../../repositories/orderItemsRepository";
 import { OrdersRepository } from "../../../repositories/ordersRepository";
 import { CustomError } from "../../../utils/customError";
@@ -17,7 +18,9 @@ type FindOrdersByUserIdAndDeliveryStatusResponse =
       deliveryStatus: EnumDeliveryStatus;
       userId: string;
       restaurantId: string;
-      customerId: string;
+      customer: {
+        name: string;
+      };
       orderItems: {
         quantity: number;
         notes: string;
@@ -29,7 +32,8 @@ type FindOrdersByUserIdAndDeliveryStatusResponse =
 export class FindOrdersByUserIdAndDeliveryStatusUseCase {
   constructor(
     private ordersRepository: OrdersRepository,
-    private orderItemsRepository: OrderItemsRepository
+    private orderItemsRepository: OrderItemsRepository,
+    private customersRepository: CustomersRepository
   ) {}
 
   async execute({
@@ -66,7 +70,9 @@ export class FindOrdersByUserIdAndDeliveryStatusUseCase {
       deliveryStatus: EnumDeliveryStatus;
       userId: string;
       restaurantId: string;
-      customerId: string;
+      customer: {
+        name: string;
+      };
       orderItems: {
         quantity: number;
         notes: string;
@@ -83,6 +89,14 @@ export class FindOrdersByUserIdAndDeliveryStatusUseCase {
         return new CustomError(false, "Itens do pedido não encontrados", 404);
       }
 
+      const customer = await this.customersRepository.findById(
+        order.customerId
+      );
+
+      if (!customer) {
+        return new CustomError(false, "Cliente do pedido não encontrados", 404);
+      }
+
       ordersWithItems.push({
         id: order.id,
         address: order.address,
@@ -91,7 +105,7 @@ export class FindOrdersByUserIdAndDeliveryStatusUseCase {
         deliveryStatus: order.deliveryStatus,
         userId: order.userId,
         restaurantId: order.restaurantId,
-        customerId: order.customerId,
+        customer: { name: customer.name },
         orderItems: orderItems.map((item) => ({
           quantity: item.quantity,
           notes: item.notes,
