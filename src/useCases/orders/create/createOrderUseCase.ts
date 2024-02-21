@@ -100,8 +100,10 @@ export class CreateOrderUseCase {
     for (const oItem of orderItems) {
       const itemExists = await this.itemsRepository.findById(oItem.itemId);
 
-      if (!itemExists)
+      if (!itemExists) {
+        await this.ordersRepository.delete(order.id);
         return new CustomError(false, "Item não encontrado", 404);
+      }
 
       const orderItem = new OrderItem(oItem.itemId, order.id);
       orderItem.notes = oItem.notes;

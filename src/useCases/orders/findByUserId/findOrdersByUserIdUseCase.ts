@@ -1,3 +1,4 @@
+import { ItemsRepository } from "./../../../repositories/itemsRepository";
 import { CustomersRepository } from "./../../../repositories/customersRepository";
 import { EnumDeliveryStatus, EnumPaymentType } from "../../../entities/order";
 import { OrderItemsRepository } from "../../../repositories/orderItemsRepository";
@@ -23,7 +24,8 @@ type FindOrdersByUserIdResponse =
       orderItems: {
         quantity: number;
         notes: string;
-        itemId: string;
+        item: string;
+        amount: number;
       }[];
     }[]
   | CustomError;
@@ -32,7 +34,8 @@ export class FindOrdersByUserIdUseCase {
   constructor(
     private ordersRepository: OrdersRepository,
     private orderItemsRepository: OrderItemsRepository,
-    private customersRepository: CustomersRepository
+    private customersRepository: CustomersRepository,
+    private itemsRepository: ItemsRepository
   ) {}
 
   async execute({
@@ -66,7 +69,8 @@ export class FindOrdersByUserIdUseCase {
       orderItems: {
         quantity: number;
         notes: string;
-        itemId: string;
+        item: string;
+        amount: number;
       }[];
     }[] = [];
 
@@ -87,6 +91,29 @@ export class FindOrdersByUserIdUseCase {
         return new CustomError(false, "Cliente do pedido não encontrados", 404);
       }
 
+      const itemsOfOrder: {
+        quantity: number;
+        notes: string;
+        item: string;
+        amount: number;
+      }[] = [];
+
+      await Promise.all(
+        orderItems.map(async (item) => {
+          const itemDetails = await this.itemsRepository.findById(item.itemId);
+
+          if (!itemDetails)
+            return new CustomError(false, "Item não encontrado", 404);
+
+          itemsOfOrder.push({
+            quantity: item.quantity,
+            notes: item.notes,
+            item: itemDetails.name,
+            amount: itemDetails.priceInCents * item.quantity,
+          });
+        })
+      );
+
       ordersWithItems.push({
         id: order.id,
         address: order.address,
@@ -96,11 +123,7 @@ export class FindOrdersByUserIdUseCase {
         userId: order.userId,
         restaurantId: order.restaurantId,
         customer: { name: customer.name },
-        orderItems: orderItems.map((item) => ({
-          quantity: item.quantity,
-          notes: item.notes,
-          itemId: item.itemId,
-        })),
+        orderItems: itemsOfOrder,
       });
     }
 
