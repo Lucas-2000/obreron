@@ -19,11 +19,13 @@ type FindOrdersByUserIdResponse =
       userId: string;
       restaurantId: string;
       customer: {
+        customerId: string;
         name: string;
       };
       orderItems: {
         quantity: number;
         notes: string;
+        itemId: string;
         item: string;
         amount: number;
       }[];
@@ -64,11 +66,13 @@ export class FindOrdersByUserIdUseCase {
       userId: string;
       restaurantId: string;
       customer: {
+        customerId: string;
         name: string;
       };
       orderItems: {
         quantity: number;
         notes: string;
+        itemId: string;
         item: string;
         amount: number;
       }[];
@@ -94,6 +98,7 @@ export class FindOrdersByUserIdUseCase {
       const itemsOfOrder: {
         quantity: number;
         notes: string;
+        itemId: string;
         item: string;
         amount: number;
       }[] = [];
@@ -108,6 +113,7 @@ export class FindOrdersByUserIdUseCase {
           itemsOfOrder.push({
             quantity: item.quantity,
             notes: item.notes,
+            itemId: item.itemId,
             item: itemDetails.name,
             amount: itemDetails.priceInCents * item.quantity,
           });
@@ -122,7 +128,7 @@ export class FindOrdersByUserIdUseCase {
         deliveryStatus: order.deliveryStatus,
         userId: order.userId,
         restaurantId: order.restaurantId,
-        customer: { name: customer.name },
+        customer: { customerId: order.customerId, name: customer.name },
         orderItems: itemsOfOrder,
       });
     }

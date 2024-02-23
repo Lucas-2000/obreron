@@ -3,7 +3,7 @@ import { createId } from "@paralleldrive/cuid2";
 export class OrderItem {
   id: string;
   quantity: number;
-  notes: string;
+  notes?: string;
   itemId: string;
   orderId: string;
   createdAt?: Date;
