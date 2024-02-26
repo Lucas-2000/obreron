@@ -9,5 +9,5 @@ export interface StatisticsRepository {
     finalDate: Date,
     restaurantId: string
   ): Promise<Statistics<number>>;
-  countMorePopularsItems(restaurantId: string): Promise<Statistics<number>>;
+  countMorePopularsItems(restaurantId: string): Promise<Statistics<number>[]>;
 }

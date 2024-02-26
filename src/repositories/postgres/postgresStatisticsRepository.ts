@@ -100,29 +100,31 @@ export class PostgresStatisticsRepository implements StatisticsRepository {
 
   async countMorePopularsItems(
     restaurantId: string
-  ): Promise<Statistics<number>> {
+  ): Promise<Statistics<number>[]> {
     await this.ensureConnection();
 
     const query = `
       SELECT
         i.name,
-        COUNT(oi.item_id) AS "totalDeliveredItems"
+        SUM(oi.quantity) AS "totalDeliveredItems"
       FROM
         order_items oi
       JOIN
         items i ON oi.item_id = i.id
+      JOIN
+        restaurants r ON i.user_id = r.user_id
       WHERE
-        oi.restaurant_id = $1
+        r.id = $1
       GROUP BY
         i.name
       ORDER BY
-        totalDeliveredItems DESC;
+        "totalDeliveredItems" DESC;
     `;
 
     const result = await this.client.query(query, [restaurantId]);
 
-    const statistic: Statistics<number> = result.rows[0];
+    const statistics: Statistics<number>[] = result.rows;
 
-    return statistic;
+    return statistics;
   }
 }
