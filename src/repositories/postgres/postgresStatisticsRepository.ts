@@ -1,5 +1,3 @@
-// PostgresStatisticsRepository.ts
-
 import { Pool } from "pg";
 import { StatisticsRepository } from "../statisticsRepository";
 import { createConnection } from "../../infra/database/connection";

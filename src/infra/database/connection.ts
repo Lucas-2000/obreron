@@ -7,7 +7,6 @@ const createConnection = async () => {
     password: String(process.env.DB_PASSWORD),
     database: process.env.DB_NAME,
     port: Number(process.env.DB_PORT),
-    max: 20,
   });
 
   await client.connect();

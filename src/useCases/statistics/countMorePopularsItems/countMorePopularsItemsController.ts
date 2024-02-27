@@ -18,6 +18,6 @@ export class CountMorePopularsItemsController {
       return res.status(result.statusCode).json({ error: result.message });
     }
 
-    return res.status(201).json(result);
+    return res.status(201).json({ productDeliveryData: result });
   }
 }
